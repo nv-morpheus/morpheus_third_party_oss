@@ -15,9 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-# Source Code for OSS Packages used by NVIDIA Morpheus
+# Source Code for OSS Packages in the NVIDIA Morpheus Docker container
 
-The source code for the OSS packages used by NVIDIA Morpheus is available in this repository. Branches in this repository correspond to the versions of the OSS packages used by NVIDIA Morpheus, ex: `branch-24.10` corresponds to version `24.10` of Morpheus and `branch-25.02` will correspond with version `25.02` of Morpheus.
+The source code for the OSS packages container in the NVIDIA Morpheus Docker image. This repository does not include packages which were already present in the base [nvidia/cuda](https://hub.docker.com/r/nvidia/cuda) image.
+
+Branches in this repository correspond to the versions of the OSS packages used by NVIDIA Morpheus, ex: `branch-24.10` corresponds to version `24.10` of Morpheus and `branch-25.02` will correspond with version `25.02` of Morpheus.
 
 The source code is organized in the following directory structure:
 ```
