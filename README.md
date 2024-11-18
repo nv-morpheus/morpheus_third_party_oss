@@ -17,7 +17,7 @@ limitations under the License.
 
 # Source Code for OSS Packages used by NVIDIA Morpheus
 
-The source code for the OSS packages used by NVIDIA Morpheus is available in this repository. Branches in this repository correspond to the versions of the OSS packages used by NVIDIA Morpheus, ex: `branch-24.10` corresponds to version `24.10` of Morpheus and `branch-25.02` will correspond with version `25.02` of Morpheus and so on.
+The source code for the OSS packages used by NVIDIA Morpheus is available in this repository. Branches in this repository correspond to the versions of the OSS packages used by NVIDIA Morpheus, ex: `branch-24.10` corresponds to version `24.10` of Morpheus and `branch-25.02` will correspond with version `25.02` of Morpheus.
 
 The source code is organized in the following directory structure:
 ```
