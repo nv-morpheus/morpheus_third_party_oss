@@ -1,0 +1,13 @@
+*.pyc
+.tox/
+dist/
+env/
+feedparser.egg-info/
+.idea/
+.venv/
+fpdocs/
+venv/
+build/
+*.egg-info/
+.doit.*
+*.html
