@@ -1,0 +1,8 @@
+.tox/
+.cache/
+*.egg-info/
+*.pyc
+/docs/build
+/build
+/README
+/dill/__info__.py
