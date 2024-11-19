@@ -1,0 +1,165 @@
+[tool.poetry]
+name = "requests-cache"
+version = "1.1.1"
+description = "A persistent cache for python requests"
+authors = ["Roman Haritonov", "Jordan Cook"]
+license = "BSD-2-Clause"
+readme = "README.md"
+documentation = "https://requests-cache.readthedocs.io"
+homepage = "https://github.com/requests-cache/requests-cache"
+repository = "https://github.com/requests-cache/requests-cache"
+keywords = ["requests", "python-requests", "cache", "http", "http-client", "web",
+            "webscraping", "performance", "sqlite", "redis", "mongodb", "gridfs", "dynamodb"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+include = [
+    {format="sdist", path="*.md"},
+    {format="sdist", path="*.yml"},
+    {format="sdist", path="docs"},
+    {format="sdist", path="examples"},
+    {format="sdist", path="tests"},
+]
+
+[tool.poetry.urls]
+"Changelog" = "https://requests-cache.readthedocs.io/en/stable/project_info/history.html"
+"Issues" = "https://github.com/requests-cache/requests-cache/issues"
+
+[tool.poetry.dependencies]
+python        = "^3.7"     # requests requires python >=3.7, <4.0
+
+# Required dependencies
+requests      = ">=2.22"   # Needs no introduction
+urllib3       = ">=1.25.5" # Use a slightly newer version than required by requests (for bugfixes)
+attrs         = ">=21.2"   # For response data models
+cattrs        = ">=22.2"   # For response serialization
+platformdirs  = ">=2.5"    # For features that use platform-specific system directories
+url-normalize = ">=1.4"    # For more accurate request matching
+
+# Optional backend dependencies
+boto3                      = {optional=true, version=">=1.15"}
+botocore                   = {optional=true, version=">=1.18"}
+pymongo                    = {optional=true, version=">=3"}
+redis                      = {optional=true, version=">=3"}
+
+# Optional serialization dependencies
+bson                       = {optional=true, version=">=0.5"}
+itsdangerous               = {optional=true, version=">=2.0"}
+pyyaml                     = {optional=true, version=">=5.4"}
+ujson                      = {optional=true, version=">=5.4"}
+
+# Dependencies for building documentation;
+# defined here because readthedocs doesn't (yet?) support poetry.dev-dependencies
+furo                       = {optional=true, version="^2023.3"}
+linkify-it-py              = {optional=true, version="^2.0"}
+myst-parser                = {optional=true, version="^1.0"}
+sphinx                     = {optional=true, version="^5.0.2"}
+sphinx-autodoc-typehints   = {optional=true, version=">=1.19"}
+sphinx-automodapi          = {optional=true, version=">=0.14"}
+sphinx-copybutton          = {optional=true, version=">=0.5"}
+sphinx-design              = {optional=true, version=">=0.2"}
+sphinx-notfound-page       = {optional=true, version=">=0.8"}
+sphinxcontrib-apidoc       = {optional=true, version=">=0.3"}
+sphinxext-opengraph        = {optional=true, version=">=0.6"}
+
+[tool.poetry.extras]
+# Package extras for optional backend dependencies
+dynamodb = ["boto3", "botocore"]
+mongodb  = ["pymongo"]
+redis    = ["redis"]
+
+# Package extras for optional seriazliation dependencies
+bson     = ["bson"]   # BSON comes with pymongo, but can also be used as a standalone codec
+json     = ["ujson"]  # Will optionally be used by JSON serializer for improved performance
+security = ["itsdangerous"]
+yaml     = ["pyyaml"]
+
+# All optional packages combined, for demo/evaluation purposes
+all      = ["boto3", "botocore", "itsdangerous", "pymongo", "pyyaml", "redis", "ujson"]
+
+# Documentation
+docs     = ["furo", "linkify-it-py", "myst-parser", "sphinx", "sphinx-autodoc-typehints",
+            "sphinx-automodapi", "sphinx-copybutton", "sphinx-design", "sphinx-notfound-page",
+            "sphinxcontrib-apidoc", "sphinxext-opengraph"]
+
+[tool.poetry.dev-dependencies]
+# For unit + integration tests
+coverage              = "^7.1"
+psutil                = "^5.0"
+pytest                = "^7.3"
+pytest-clarity        = "^1.0.1"
+pytest-cov            = ">=3.0"
+pytest-rerunfailures  = "^10.1"
+pytest-xdist          = ">=2.2"
+requests-mock         = "^1.9"
+responses             = "0.19.0"
+tenacity              = "^8.0"
+timeout-decorator     = "^0.5"
+time-machine          = {version = "^2.9", markers = "implementation_name != 'pypy'"}
+
+# Tools for linting, type checking, etc. are managed with pre-commit
+pre-commit            = "^2.19"
+
+# For convenience in local development
+nox                   = "^2023.4"
+nox-poetry            = "^1.0.0"
+rich                  = ">=10.0"
+sphinx-autobuild      = "^2021.3.14"
+
+# Workaround for missing dependency on python 3.7
+zipp                  = {version = ">=3.8", python = "<3.8"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+skip-string-normalization = true
+
+[tool.coverage.html]
+directory = 'test-reports'
+
+[tool.coverage.xml]
+output = 'test-reports/coverage.xml'
+
+[tool.coverage.run]
+branch = true
+source = ['requests_cache']
+omit = [
+    'requests_cache/__init__.py',
+    'requests_cache/backends/__init__.py',
+    'requests_cache/models/__init__.py',
+    'requests_cache/serializers/__init__.py',
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    'pragma: no cover',
+    'if TYPE_CHECKING:',
+    'if logger.level',
+    'except ImportError:',
+]
+
+[tool.isort]
+profile = 'black'
+line_length = 100
+skip_gitignore = true
+skip = [
+    'examples/',
+    'tests/compat/',
+]
+known_first_party = ['tests']
+
+[tool.mypy]
+ignore_missing_imports = true
+
+
+[tool.ruff]
+format = 'grouped'
+line-length = 120
+select = ['B', 'C4','C90', 'E', 'F']
+ignore = ['B023']

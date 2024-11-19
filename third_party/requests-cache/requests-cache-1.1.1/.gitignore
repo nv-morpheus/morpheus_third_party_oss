@@ -1,0 +1,39 @@
+build/
+dist/
+downloads/
+example_cache/
+http_cache/
+venv/
+
+*.db
+*.egg
+*.egg-info
+*.py[cod]
+*.sqlite
+*.sqlite-journal
+.venv
+Pipfile
+profile.json
+
+# JS
+node_modules/
+package-lock.json
+package.json
+
+# Editors
+.~*
+.idea/
+.vim/
+.vscode/
+
+# Test / coverage reports
+.coverage
+.coverage.*
+.COVERAGE.*
+.mypy_cache/
+.nox/
+test-reports/
+
+# Sphinx
+docs/_build/
+docs/modules/
