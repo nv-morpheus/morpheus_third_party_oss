@@ -1,0 +1,11 @@
+*.pyc
+/_test/
+/build/
+/versioneer.py
+/git_version.py
+/MANIFEST
+/dist/
+/versioneer.egg-info/
+/.idea
+*.iml
+/.tox/
