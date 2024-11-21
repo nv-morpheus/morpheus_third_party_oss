@@ -1,0 +1,16 @@
+*.pyc
+*.so
+.coverage
+.direnv/
+.envrc
+.idea/
+.mypy_cache/
+.tox/
+.vscode/
+build/
+compliance/reports/
+dist/
+docs/_build/
+experiments/compression/corpus/
+htmlcov/
+src/websockets.egg-info/
