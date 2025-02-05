@@ -1,0 +1,21 @@
+# This workflow runs edgetest on datacompy @ 17:30 UTC Fridays.
+# https://github.com/edgetest-dev/run-edgetest-action
+
+name: Run edgetest
+on:
+  schedule:
+    - cron: '30 17 * * 5'
+jobs:
+  edgetest:
+    runs-on: ubuntu-latest
+    name: running edgetest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: develop
+      - id: run-edgetest
+        uses: edgetest-dev/run-edgetest-action@v1.4
+        with:
+          edgetest-flags: '-c pyproject.toml --export'
+          base-branch: 'develop'
+          skip-pr: 'false'

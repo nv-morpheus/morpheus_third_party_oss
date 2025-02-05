@@ -1,0 +1,15 @@
+[run]
+omit =
+    */python?.?/*
+    */lib-python/?.?/*.py
+    */lib_pypy/*
+    */site-packages/*
+    *.egg/*
+    elasticsearch/_async/client/
+    elasticsearch/_sync/client/
+    test_elasticsearch/*
+
+[report]
+show_missing = True
+exclude_lines=
+    raise NotImplementedError*

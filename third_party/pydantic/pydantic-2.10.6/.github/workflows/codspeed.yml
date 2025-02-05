@@ -1,0 +1,37 @@
+name: codspeed
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  # `workflow_dispatch` allows CodSpeed to trigger backtest
+  # performance analysis in order to generate initial data.
+  workflow_dispatch:
+
+env:
+  UV_FROZEN: true
+
+jobs:
+  codspeed-profiling:
+    name: CodSpeed profiling
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      # Using this action is still necessary for CodSpeed to work:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: install deps
+        run: uv sync --python 3.12 --group testing-extra --extra email --frozen
+
+      - name: Run CodSpeed benchmarks
+        uses: CodSpeedHQ/action@v3
+        with:
+          run: uv run pytest ./tests/benchmarks --codspeed

@@ -1,0 +1,37 @@
+include AUTHORS.txt
+include LICENSE.txt
+include NEWS.rst
+include README.rst
+include SECURITY.md
+include pyproject.toml
+
+include build-requirements.in
+include build-requirements.txt
+include build-project.py
+
+include src/pip/_vendor/README.rst
+include src/pip/_vendor/vendor.txt
+recursive-include  src/pip/_vendor *LICENSE*
+recursive-include  src/pip/_vendor *COPYING*
+
+include docs/requirements.txt
+
+exclude .git-blame-ignore-revs
+exclude .mailmap
+exclude .readthedocs.yml
+exclude .pre-commit-config.yaml
+exclude .readthedocs-custom-redirects.yml
+exclude noxfile.py
+
+recursive-include src/pip/_vendor *.pem
+recursive-include src/pip/_vendor py.typed
+recursive-include docs *.css *.py *.rst *.md
+recursive-include docs *.dot *.png
+
+recursive-exclude src/pip/_vendor *.pyi
+
+prune .github
+prune docs/build
+prune news
+prune tests
+prune tools

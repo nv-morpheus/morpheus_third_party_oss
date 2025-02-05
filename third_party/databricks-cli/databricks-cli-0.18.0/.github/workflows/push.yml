@@ -1,0 +1,148 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+    env:
+      PYTHON_VERSION: ${{ matrix.python-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install pip
+        run: pip install --upgrade pip setuptools
+
+      - name: Install development dependencies
+        run: pip install --upgrade -r dev-requirements.txt
+
+      - name: Log package versions
+        run: pip freeze
+
+      - name: Run tests
+        run: pytest tests --cov=./
+
+      - name: Run lint
+        if: matrix.python-version != '3.12' # new lint rules in 3.12 don't pass
+        run: prospector --profile ./prospector.yaml -t dodgy -t mccabe -t profile-validator -t pyflakes -t pylint
+
+      - name: Run rstcheck
+        run: rstcheck README.rst
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          env_vars: PYTHON_VERSION
+
+  build:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+    env:
+      PYTHON_VERSION: ${{ matrix.python-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install pip
+        run: pip install --upgrade pip setuptools
+
+      - name: Install dependencies
+        run: |
+          pip install wheel
+
+      - name: Build distribution files
+        id: build-dist
+        run: |
+          # Build distribution files
+          python setup.py sdist bdist_wheel
+
+          # List distribution files and check their file sizes
+          ls -lh dist
+
+          # Set step outputs
+          sdist_path=$(find dist -type f -name "*.tar.gz")
+          wheel_path=$(find dist -type f -name "*.whl")
+          wheel_name=$(basename $wheel_path)
+          wheel_size=$(stat -c %s $wheel_path)
+          echo "::set-output name=sdist-path::${sdist_path}"
+          echo "::set-output name=wheel-path::${wheel_path}"
+          echo "::set-output name=wheel-name::${wheel_name}"
+          echo "::set-output name=wheel-size::${wheel_size}"
+
+      - name: Test installation from tarball
+        run: |
+          set -x
+          pip install ${{ steps.build-dist.outputs.sdist-path }}
+          python -c "import databricks_cli.version; print(databricks_cli.version.version)"
+          which databricks
+          databricks --version
+          which dbfs
+          dbfs --version
+
+      - name: Test installation from wheel
+        run: |
+          set -x
+          pip install --force-reinstall ${{ steps.build-dist.outputs.wheel-path }}
+          python -c "import databricks_cli.version; print(databricks_cli.version.version)"
+          which databricks
+          databricks --version
+          which dbfs
+          dbfs --version
+
+  compat:
+    name: Public API compatibility
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          path: databricks-cli-main
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Install pip
+        run: pip install --upgrade pip
+
+      - name: Install development dependencies
+        run: pip install --upgrade -r dev-requirements.txt
+
+      - name: Run compatibility test
+        run: |
+          export DATABRICKS_CLI_MAIN_CHECKOUT=$GITHUB_WORKSPACE/databricks-cli-main
+          pytest --capture=no tests/test_compat.py

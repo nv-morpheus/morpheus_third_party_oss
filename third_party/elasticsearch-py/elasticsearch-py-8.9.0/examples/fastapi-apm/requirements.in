@@ -1,0 +1,4 @@
+fastapi
+elasticsearch[async]
+elastic-apm
+uvicorn
