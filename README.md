@@ -17,16 +17,15 @@ limitations under the License.
 
 # Source Code for OSS Packages in the NVIDIA Morpheus Docker container
 
-This repository contains the source code for OSS packages which are included in the NVIDIA Morpheus Docker image. This repository does not include packages which were already present in the base [`nvidia/cuda`](https://hub.docker.com/r/nvidia/cuda) image.
+This repository contains the source code for OSS packages which are included in the NVIDIA Morpheus Docker images. 
 
-Branches in this repository correspond to the versions of the OSS packages used by NVIDIA Morpheus, ex: `branch-24.10` corresponds to version `24.10` of Morpheus and `branch-25.02` will correspond with version `25.02` of Morpheus.
-
-The source code is organized in the following directory structure:
+The source code archives are organized in the following directory structure:
 ```
 third_party/
-├── package_name
-│   ├── package_version
-│   │   ├── package_source_code
+├── release_version
+│   ├── image_name-sha256-<SHA HASH>.tar
 ```
+
+Where the <SHA HASH> is the output of the `sha256sum` command on the image archive.
 
 Source code provided for each package is provided without any modifications.
